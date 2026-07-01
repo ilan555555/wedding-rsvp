@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding RSVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --blush: #e8d5d0;
+      --sage: #8a9a7b;
+      --sage-dark: #6b7a5e;
+      --charcoal: #3d3a36;
+      --gold: #b8956c;
+      --white: #ffffff;
+      --error: #c45c5c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1.5rem 2.5rem;
+      background: linear-gradient(180deg, var(--blush) 0%, var(--cream) 100%);
+    }
+
+    .hero-ornament {
+      font-size: 1.5rem;
+      color: var(--gold);
+      letter-spacing: 0.4em;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 6vw, 3.75rem);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero .couple-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: var(--sage-dark);
+      margin-bottom: 1rem;
+    }
+
+    .hero .date {
+      font-size: 0.95rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .intro {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 1.05rem;
+      color: #5c5854;
+    }
+
+    form {
+      background: var(--white);
+      border-radius: 2px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 24px rgba(61, 58, 54, 0.06);
+    }
+
+    fieldset {
+      border: none;
+      margin-bottom: 1.75rem;
+    }
+
+    legend, .field-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.75rem;
+      color: var(--charcoal);
+    }
+
+    .required::after {
+      content: ' *';
+      color: var(--gold);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--blush);
+      border-radius: 2px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 300;
+      background: var(--cream);
+      color: var(--charcoal);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(138, 154, 123, 0.15);
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .radio-group.horizontal {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .radio-option, .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--blush);
+      border-radius: 2px;
+      background: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .radio-group.horizontal .radio-option { flex: 1; min-width: 120px; justify-content: center; }
+
+    .radio-option:has(input:checked),
+    .checkbox-option:has(input:checked) {
+      border-color: var(--sage);
+      background: rgba(138, 154, 123, 0.1);
+    }
+
+    .radio-option input, .checkbox-option input {
+      accent-color: var(--sage-dark);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    .one-day-options {
+      margin: -0.25rem 0 0.8rem 1.75rem;
+      padding: 0.85rem 1rem;
+      border-left: 2px solid var(--sage);
+      background: rgba(138, 154, 123, 0.06);
+    }
+
+    .conditional { display: none; }
+    .conditional.visible { display: block; }
+
+    .guest-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .guest-row { grid-template-columns: 1fr; }
+      form { padding: 1.75rem 1.25rem; }
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      color: #8a8580;
+      margin-top: 0.35rem;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+      display: none;
+    }
+
+    .field-error input,
+    .field-error select,
+    .field-error textarea {
+      border-color: var(--error);
+    }
+
+    .field-error .error-msg { display: block; }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--sage-dark);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button[type="submit"]:hover { background: var(--sage); }
+    button[type="submit"]:active { transform: scale(0.99); }
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--white);
+      border-radius: 2px;
+      box-shadow: 0 4px 24px rgba(61, 58, 54, 0.06);
+    }
+
+    .success-screen.visible { display: block; }
+
+    .success-screen .icon {
+      font-size: 3rem;
+      color: var(--sage);
+      margin-bottom: 1rem;
+    }
+
+    .success-screen h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #8a8580;
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-ornament">✦</div>
+    <h1>Wedding Attendance Survey</h1>
+    <p class="couple-names">Ilan &amp; Connie</p>
+    <p class="date">30th &amp; 31st of August 2026</p>
+  </header>
+
+  <main class="container">
+    <p class="intro">
+      Dear family and friends, Connie and I would like to ask you if you would be able to join us for our wedding on the following schedule.
+      <br><br>
+      <strong>30th of August:</strong> Houppa / cocktail / dinner - party<br>
+      <strong>31st of August:</strong> Brunch
+      <br><br>
+      The domaine will be near Paris, maximum one hour by car. We know the timing is tight; this survey is to understand the level of attendance.
+    </p>
+
+    <form id="rsvp-form" action="https://formspree.io/f/xnjkgnvv" method="POST" novalidate>
+      <fieldset>
+        <legend class="required">Your full name</legend>
+        <input type="text" id="name" name="name" autocomplete="name" placeholder="Jane Smith" required>
+        <p class="error-msg">Please enter your name.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend class="required">Email address</legend>
+        <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+        <p class="error-msg">Please enter your email address.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend class="required">Number of adult guests</legend>
+        <input type="number" id="adult-count" name="adult_count" min="1" max="20" value="1" required>
+        <p class="hint">Please include yourself in this number.</p>
+        <p class="error-msg">Please enter the number of adults.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend class="required">Attendance</legend>
+        <div class="radio-group" role="radiogroup">
+          <label class="radio-option">
+            <input type="radio" name="attendance" value="both_days_sleep" required>
+            Yes definitely! We will be present both days and we wish to sleep in the domaine or nearby.
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="attendance" value="one_day">
+            Yes definitely, only one day: the 30th or the 31st.
+          </label>
+          <div id="day-section" class="one-day-options">
+            <p class="field-label required">Please tick the day you can attend</p>
+            <div class="checkbox-group">
+              <label class="checkbox-option">
+                <input type="checkbox" name="selected_days" value="30_august">
+                30th of August - Houppa / cocktail / dinner - party
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="selected_days" value="31_august">
+                31st of August - Brunch
+              </label>
+            </div>
+            <p class="error-msg">Please select one day: either the 30th or the 31st.</p>
+          </div>
+          <label class="radio-option">
+            <input type="radio" name="attendance" value="no">
+            No, sorry, we will be unable to participate.
+          </label>
+        </div>
+        <p class="error-msg">Please choose one answer.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Comment</legend>
+        <textarea id="comment" name="comment" placeholder="Leave us a comment or any useful information..."></textarea>
+      </fieldset>
+
+      <button type="submit" id="submit-btn">Send Response</button>
+    </form>
+
+    <div id="success-screen" class="success-screen">
+      <div class="icon">♥</div>
+      <h2>Thank you!</h2>
+      <p id="success-message">Your response has been received. Thank you for helping us plan.</p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('rsvp-form');
+    const successScreen = document.getElementById('success-screen');
+    const successMessage = document.getElementById('success-message');
+    const daySection = document.getElementById('day-section');
+    const submitBtn = document.getElementById('submit-btn');
+
+    function selectedAttendance() {
+      const selected = document.querySelector('input[name="attendance"]:checked');
+      return selected ? selected.value : '';
+    }
+
+    function clearSelectedDays() {
+      document.querySelectorAll('input[name="selected_days"]').forEach(checkbox => {
+        checkbox.checked = false;
+      });
+    }
+
+    document.querySelectorAll('input[name="attendance"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.checked && radio.value !== 'one_day') {
+          clearSelectedDays();
+        }
+      });
+    });
+
+    document.querySelectorAll('input[name="selected_days"]').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        if (!checkbox.checked) return;
+        document.querySelector('input[name="attendance"][value="one_day"]').checked = true;
+        document.querySelectorAll('input[name="selected_days"]').forEach(other => {
+          if (other !== checkbox) other.checked = false;
+        });
+      });
+    });
+
+    function validateFieldset(fieldset) {
+      const required = fieldset.querySelector('[required]');
+      if (!required) return true;
+
+      let valid = true;
+      if (required.type === 'radio') {
+        valid = !!fieldset.querySelector('input:checked');
+      } else {
+        valid = required.value.trim().length > 0;
+      }
+
+      fieldset.classList.toggle('field-error', !valid);
+      return valid;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      let valid = true;
+      form.querySelectorAll('fieldset').forEach(fs => {
+        if (fs.classList.contains('conditional') && !fs.classList.contains('visible')) return;
+        if (!validateFieldset(fs)) valid = false;
+      });
+
+      const attendance = selectedAttendance();
+      const dayFieldset = document.getElementById('day-section');
+      const selectedDays = Array.from(document.querySelectorAll('input[name="selected_days"]:checked')).map(input => input.value);
+
+      if (attendance === 'one_day' && selectedDays.length !== 1) {
+        dayFieldset.classList.add('field-error');
+        valid = false;
+      } else {
+        dayFieldset.classList.remove('field-error');
+      }
+
+      if (!valid) return;
+
+      const data = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        attendance,
+        adult_count: parseInt(document.getElementById('adult-count').value, 10) || 0,
+        selected_days: attendance === 'one_day' ? selectedDays : attendance === 'both_days_sleep' ? ['30_august', '31_august'] : [],
+        accommodation_preference: attendance === 'both_days_sleep' ? 'domain_or_nearby' : '',
+        comment: document.getElementById('comment').value.trim(),
+        submitted_at: new Date().toISOString()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const response = await fetch('https://formspree.io/f/xnjkgnvv', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Server error');
+
+        successMessage.textContent = attendance === 'no'
+          ? "Thank you for letting us know. We will miss you!"
+          : "Your response has been received. Thank you for helping us plan.";
+      } catch {
+        localStorage.setItem('wedding-rsvp-' + Date.now(), JSON.stringify(data));
+        successMessage.textContent = "Your response was saved locally, but it was not sent online. Please check your connection and try again.";
+      }
+
+      form.style.display = 'none';
+      successScreen.classList.add('visible');
+      document.querySelector('.intro').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
