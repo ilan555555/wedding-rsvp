@@ -66,6 +66,14 @@
       color: var(--gold);
     }
 
+    .hebrew-blessing {
+      direction: rtl;
+      font-size: clamp(1.15rem, 3vw, 1.45rem);
+      color: var(--sage-dark);
+      margin-top: 1rem;
+      letter-spacing: 0.02em;
+    }
+
     .container {
       max-width: 560px;
       margin: 0 auto;
@@ -268,20 +276,29 @@
 </head>
 <body>
   <header class="hero">
-    <div class="hero-ornament">✦</div>
+    <div class="hero-ornament">✡ ✦ ✡</div>
     <h1>Wedding Attendance Survey</h1>
     <p class="couple-names">Ilan &amp; Connie</p>
     <p class="date">30th &amp; 31st of August 2026</p>
+    <p class="hebrew-blessing" lang="he">קוֹל שָׂשׂוֹן וְקוֹל שִׂמְחָה, קוֹל חָתָן וְקוֹל כַּלָּה</p>
   </header>
 
   <main class="container">
     <p class="intro">
-      Dear family and friends, Connie and I would like to ask you if you would be able to join us for our wedding on the following schedule.
+      Dear family and friends,
       <br><br>
-      <strong>30th of August:</strong> Houppa / cocktail / dinner - party<br>
+      Connie and I would like to know if you would be able to join us for our wedding celebration.
+      <br><br>
+      The planned schedule is:
+      <br><br>
+      <strong>30th of August:</strong> Houppa (religious ceremony), cocktail, dinner and party<br>
       <strong>31st of August:</strong> Brunch
       <br><br>
-      The domaine will be near Paris, maximum one hour by car. We know the timing is tight; this survey is to understand the level of attendance.
+      The domaine will be located near Paris, within approximately one hour by car.
+      <br><br>
+      We know the timing is tight, so this survey is simply to help us understand the expected level of attendance.
+      <br><br>
+      Please respond before <strong>7th of July</strong>.
     </p>
 
     <form id="rsvp-form" action="https://formspree.io/f/xnjkgnvv" method="POST" novalidate>
@@ -309,18 +326,18 @@
         <div class="radio-group" role="radiogroup">
           <label class="radio-option">
             <input type="radio" name="attendance" value="both_days_sleep" required>
-            Yes definitely! We will be present both days and we wish to sleep in the domaine or nearby.
+            Yes, definitely! We will be present on both days and would like to sleep at the domaine or nearby.
           </label>
           <label class="radio-option">
             <input type="radio" name="attendance" value="one_day">
-            Yes definitely, only one day: the 30th or the 31st.
+            Yes, definitely, but only for one day. Please select either the 30th or the 31st below.
           </label>
           <div id="day-section" class="one-day-options">
-            <p class="field-label required">Please tick the day you can attend</p>
+            <p class="field-label required">Please select the day you can attend</p>
             <div class="checkbox-group">
               <label class="checkbox-option">
                 <input type="checkbox" name="selected_days" value="30_august">
-                30th of August - Houppa / cocktail / dinner - party
+                30th of August - Houppa (religious ceremony), cocktail, dinner and party
               </label>
               <label class="checkbox-option">
                 <input type="checkbox" name="selected_days" value="31_august">
@@ -331,18 +348,18 @@
           </div>
           <label class="radio-option">
             <input type="radio" name="attendance" value="no">
-            No, sorry, we will be unable to participate.
+            No, unfortunately we will not be able to attend.
           </label>
         </div>
         <p class="error-msg">Please choose one answer.</p>
       </fieldset>
 
       <fieldset>
-        <legend>Comment</legend>
+        <legend>Comment or note</legend>
         <textarea id="comment" name="comment" placeholder="Leave us a comment or any useful information..."></textarea>
       </fieldset>
 
-      <button type="submit" id="submit-btn">Send Response</button>
+      <button type="submit" id="submit-btn">Send response</button>
     </form>
 
     <div id="success-screen" class="success-screen">
